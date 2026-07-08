@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://nbc2205s60w8"]
+
+[ext_resource type="Texture2D" uid="uid://fckmwn6my1cr" path="res://icon.svg" id="1_cphx4"]
+[ext_resource type="Script" uid="uid://cvpqwui3207np" path="res://dialogue/dialogue_component.gd" id="2_t60mo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rg6at"]
+size = Vector2(128, 128)
+
+[node name="DemoNPC" type="Node2D" unique_id=636916420]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1193985166]
+texture = ExtResource("1_cphx4")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=63448475]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=374786237]
+shape = SubResource("RectangleShape2D_rg6at")
+
+[node name="DialogueComponent" type="Node" parent="." unique_id=1837059081]
+script = ExtResource("2_t60mo")
+dialogue_file = "res://dialogue/dialogue_example.json"
+start_node = null
+lock_movement = false

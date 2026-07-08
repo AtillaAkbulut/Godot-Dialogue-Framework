@@ -1,0 +1,34 @@
+{
+  "speaker": {
+	"name": "Old Man",
+	"portrait": "res://portraits/old_man.png"
+  },
+  "start": "intro",
+  "nodes": {
+	"intro": {
+	  "text": "Hey. You look lost.",
+	  "next": "question"
+	},
+	"question": {
+	  "text": "Do you need help?",
+	  "choices": [
+		{
+		  "text": "Yes.",
+		  "next": "yes"
+		},
+		{
+		  "text": "No.",
+		  "next": "no"
+		}
+	  ]
+	},
+	"yes": {
+	  "text": "Then follow the road to the station.",
+	  "end": true
+	},
+	"no": {
+	  "text": "Alright. Stay safe.",
+	  "end": true
+	}
+  }
+}

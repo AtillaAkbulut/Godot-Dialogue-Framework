@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cfnqikp8pt2t0"]
+
+[ext_resource type="Script" uid="uid://d3ihoen72q350" path="res://dialogue/dialogue_ui.gd" id="1_km8cd"]
+
+[node name="DialogueUI" type="CanvasLayer" unique_id=719020287]
+script = ExtResource("1_km8cd")
+
+[node name="Panel" type="Panel" parent="." unique_id=732633407]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -130.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PortraitRect" type="TextureRect" parent="Panel" unique_id=1329126609]
+layout_mode = 0
+offset_left = 949.0
+offset_top = -84.0
+offset_right = 1142.0
+offset_bottom = 117.0
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=171998722]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpeakerLabel" type="Label" parent="Panel/VBoxContainer" unique_id=77159645]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextLabel" type="Label" parent="Panel/VBoxContainer" unique_id=982223704]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=764783396]
+layout_mode = 2

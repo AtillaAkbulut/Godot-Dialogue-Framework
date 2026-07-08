@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dkbl8nhed01pt"]
+
+[ext_resource type="Script" uid="uid://cmfirevyads61" path="res://demo/demo_player.gd" id="1_64sv3"]
+[ext_resource type="Texture2D" uid="uid://fckmwn6my1cr" path="res://icon.svg" id="1_vjbjj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_64sv3"]
+size = Vector2(126, 124)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3c26i"]
+size = Vector2(204, 210)
+
+[node name="DemoPlayer" type="CharacterBody2D" unique_id=1125294017]
+script = ExtResource("1_64sv3")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=266570891]
+texture = ExtResource("1_vjbjj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=713100165]
+shape = SubResource("RectangleShape2D_64sv3")
+
+[node name="DialogueInteractor" type="Area2D" parent="." unique_id=1786107554]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueInteractor" unique_id=1318858804]
+shape = SubResource("RectangleShape2D_3c26i")

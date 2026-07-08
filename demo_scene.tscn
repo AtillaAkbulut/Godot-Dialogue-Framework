@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://nwggbslalxqk"]
+
+[ext_resource type="Script" uid="uid://dhlb1g6ycw3e1" path="res://demo_scene.gd" id="1_8n7uv"]
+[ext_resource type="PackedScene" uid="uid://cfnqikp8pt2t0" path="res://dialogue/dialogue_ui.tscn" id="2_ayuu8"]
+[ext_resource type="PackedScene" uid="uid://nbc2205s60w8" path="res://demo/demo_npc.tscn" id="3_ctgmk"]
+[ext_resource type="PackedScene" uid="uid://dkbl8nhed01pt" path="res://demo/demo_player.tscn" id="4_1hm1i"]
+
+[node name="demo_scene" type="Node2D" unique_id=331255201]
+script = ExtResource("1_8n7uv")
+
+[node name="DialogueUI" parent="." unique_id=719020287 instance=ExtResource("2_ayuu8")]
+
+[node name="DemoNPC" parent="." unique_id=636916420 instance=ExtResource("3_ctgmk")]
+position = Vector2(872, 208)
+
+[node name="DemoPlayer" parent="." unique_id=1125294017 instance=ExtResource("4_1hm1i")]
+position = Vector2(623, 212)
