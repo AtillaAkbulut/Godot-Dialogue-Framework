@@ -24,3 +24,20 @@ static func load_speaker(data: Dictionary) -> DialogueSpeaker:
 		speaker_data.get("name", ""),
 		speaker_data.get("portrait", "")
 	)
+
+static func load_choices(raw_choices: Array) -> Array:
+	var choices: Array = []
+	
+	for raw_choice in raw_choices:
+		if typeof(raw_choice) != TYPE_DICTIONARY:
+			continue
+		
+		var choice := DialogueChoice.new(
+			raw_choice.get("text", ""),
+			raw_choice.get("next", ""),
+			raw_choice.get("event", "")
+		)
+		
+		choices.append(choice)
+	
+	return choices
