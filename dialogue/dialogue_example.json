@@ -7,6 +7,12 @@
   "nodes": {
 	"intro": {
 	  "text": "Hey. You look lost.",
+	  "commands": [
+		{
+			"type": "set_text_speed",
+			"value": 15
+		}
+	  ],
 	  "next": "question"
 	},
 	"question": {
@@ -31,6 +37,12 @@
 	},
 	"yes": {
 	  "text": "Then follow the road to the station.",
+	  "commands": [
+		{
+			"type": "set_text_speed",
+			"value": 80
+		}
+	  ],
 	  "events": [
 		"old_man_help_accepted",
         "achievement_first_help"

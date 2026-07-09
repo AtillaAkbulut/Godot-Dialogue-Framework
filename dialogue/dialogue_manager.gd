@@ -10,6 +10,8 @@ signal dialogue_event_triggered(event_id: String)
 
 signal choices_ready(choices: Array)
 
+signal dialogue_command_requested(command: DialogueCommand)
+
 enum DialogueState {
 	INACTIVE,
 	TYPING,
@@ -126,6 +128,7 @@ func _show_current_node() -> void:
 		end_dialogue()
 		return
 	
+	_request_commands(current_node.commands)
 	line_changed.emit(current_node)
 	_trigger_events(current_node.events)
 	
@@ -193,3 +196,10 @@ func _trigger_events(events: Array) -> void:
 		
 		
 		dialogue_event_triggered.emit(event_id)
+
+func _request_commands(commands: Array) -> void:
+	for command in commands:
+		if command == null:
+			continue
+		
+		dialogue_command_requested.emit(command)

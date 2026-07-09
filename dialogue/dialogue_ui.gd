@@ -16,6 +16,7 @@ func _ready() -> void:
 	hide()
 	portrait_rect.hide()
 	
+	DialogueManager.dialogue_command_requested.connect(_on_dialogue_command_requested)
 	DialogueManager.dialogue_started.connect(_on_dialogue_started)
 	DialogueManager.line_changed.connect(_on_line_changed)
 	DialogueManager.choices_requested.connect(_on_choices_requested)
@@ -129,3 +130,12 @@ func _skip_typewriter() -> void:
 	text_label.text = full_text
 	is_typing = false
 	DialogueManager.request_choices_after_text_finished()
+
+func _on_dialogue_command_requested(command: DialogueCommand) -> void:
+	match command.type:
+		"set_text_speed":
+			if typeof(command.value) == TYPE_FLOAT or typeof(command.value) == TYPE_INT:
+				typewriter_speed = float(command.value)
+		
+		"reset_text_speed":
+			typewriter_speed = 45.0

@@ -45,7 +45,8 @@ static func _load_nodes(raw_nodes: Dictionary) -> Dictionary:
 			raw_node.get("next", ""),
 			choices,
 			raw_node.get("end", false),
-			_load_events(raw_node)
+			_load_events(raw_node),
+			_load_commands(raw_node)
 		)
 		
 		nodes[node_id] = node
@@ -79,3 +80,28 @@ static func _load_events(data: Dictionary) -> Array:
 		return [data["event"]]
 	
 	return []
+
+static func _load_commands(data: Dictionary) -> Array:
+	var commands: Array = []
+	
+	if not data.has("commands"):
+		return commands
+	
+	var raw_commands = data["commands"]
+	
+	if typeof(raw_commands) != TYPE_ARRAY:
+		return commands
+	
+	for raw_command in raw_commands:
+		if typeof(raw_command) != TYPE_DICTIONARY:
+			continue
+		
+		var command := DialogueCommand.new(
+			raw_command.get("type", ""),
+			raw_command.get("value", null),
+			raw_command.get("duration", 0.0)
+		)
+		
+		commands.append(command)
+	
+	return commands
