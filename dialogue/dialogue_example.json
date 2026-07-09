@@ -14,22 +14,34 @@
 	  "choices": [
 		{
 		  "text": "Yes.",
-		  "event": "choice_yes_selected",
-		  "next": "yes"
+		  "next": "yes",
+		  "events": [
+			"choice_yes_selected",
+            "tutorial_choice_used"
+		  ]
 		},
 		{
 		  "text": "No.",
-		  "next": "no"
+		  "next": "no",
+		  "events": [
+            "choice_no_selected"
+		  ]
 		}
 	  ]
 	},
 	"yes": {
 	  "text": "Then follow the road to the station.",
-	  "event": "old_man_help_accepted",
+	  "events": [
+		"old_man_help_accepted",
+        "achievement_first_help"
+	  ],
 	  "end": true
 	},
 	"no": {
 	  "text": "Alright. Stay safe.",
+	  "events": [
+        "old_man_help_declined"
+	  ],
 	  "end": true
 	}
   }

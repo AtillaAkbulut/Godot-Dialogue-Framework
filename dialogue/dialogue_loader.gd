@@ -45,7 +45,7 @@ static func _load_nodes(raw_nodes: Dictionary) -> Dictionary:
 			raw_node.get("next", ""),
 			choices,
 			raw_node.get("end", false),
-			raw_node.get("event", "")
+			_load_events(raw_node)
 		)
 		
 		nodes[node_id] = node
@@ -62,9 +62,20 @@ static func load_choices(raw_choices: Array) -> Array:
 		var choice := DialogueChoice.new(
 			raw_choice.get("text", ""),
 			raw_choice.get("next", ""),
-			raw_choice.get("event", "")
+			_load_events(raw_choice)
 		)
 		
 		choices.append(choice)
 	
 	return choices
+
+static func _load_events(data: Dictionary) -> Array:
+	if data.has("events") and typeof(data["events"]) == TYPE_ARRAY:
+		
+		return data["events"]
+	
+	if data.has("event") and typeof(data["event"]) == TYPE_STRING:
+		
+		return [data["event"]]
+	
+	return []

@@ -94,7 +94,8 @@ func confirm_selection() -> void:
 		return
 	
 	var choice: DialogueChoice = current_choices[selected_choice_index]
-	_trigger_choice_event(choice)
+	
+	_trigger_events(choice.events)
 	
 	if choice.next_node_id != "":
 		current_node_id = choice.next_node_id
@@ -126,7 +127,7 @@ func _show_current_node() -> void:
 		return
 	
 	line_changed.emit(current_node)
-	_trigger_node_event(current_node)
+	_trigger_events(current_node.events)
 	
 	if current_node.choices.size() > 0:
 		current_choices = current_node.choices
@@ -180,21 +181,15 @@ func _go_to_next_node() -> void:
 	else:
 		end_dialogue()
 
-
-func _trigger_node_event(node: DialogueNode) -> void:
-	if node == null:
-		return
+func _trigger_events(events: Array) -> void:
 	
-	if node.event_id == "":
-		return
 	
-	dialogue_event_triggered.emit(node.event_id)
-
-func _trigger_choice_event(choice: DialogueChoice) -> void:
-	if choice == null:
-		return
-	
-	if choice.event_id == "":
-		return
-	
-	dialogue_event_triggered.emit(choice.event_id)
+	for event_id in events:
+		if typeof(event_id) != TYPE_STRING:
+			continue
+		
+		if event_id == "":
+			continue
+		
+		
+		dialogue_event_triggered.emit(event_id)
