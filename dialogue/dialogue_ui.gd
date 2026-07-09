@@ -58,38 +58,46 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_dialogue_started() -> void:
 	show()
 
-func _on_line_changed(line_data: Dictionary) -> void:
+func _on_line_changed(dialogue_node: DialogueNode) -> void:
 	_clear_choices()
 	
 	DialogueManager.set_typing_state()
 	
-	speaker_label.text = line_data.get("speaker", "")
-	full_text = line_data.get("text", "")
-	visible_character_count = 0.0
-	is_typing = true
-	text_label.text = ""
+	if dialogue_node == null:
+		return
 	
-	var portrait_path: String = line_data.get("portrait", "")
-	
-	if portrait_path != "":
-		var texture := load(portrait_path)
+	if DialogueManager.current_speaker != null:
+		speaker_label.text = DialogueManager.current_speaker.name
+		var portrait_path := DialogueManager.current_speaker.portrait_path
 		
-		if texture != null:
-			portrait_rect.texture = texture
-			portrait_rect.show()
+		if portrait_path != "":
+			var texture := load(portrait_path)
+			
+			if texture != null:
+				portrait_rect.texture = texture
+				portrait_rect.show()
+			else:
+				portrait_rect.texture = null
+				portrait_rect.hide()
 		else:
 			portrait_rect.texture = null
 			portrait_rect.hide()
 	else:
+		speaker_label.text = ""
 		portrait_rect.texture = null
 		portrait_rect.hide()
+	
+	full_text = dialogue_node.text
+	visible_character_count = 0.0
+	is_typing = true
+	text_label.text = ""
 
 func _on_choices_requested(choices: Array) -> void:
 	_clear_choices()
 	
-	for i in choices.size():
+	for choice in choices:
 		var label := Label.new()
-		label.text = choices[i].get("text", "Choice")
+		label.text = choice.text
 		choices_container.add_child(label)
 
 func _on_choice_selection_changed(index: int) -> void:
@@ -97,11 +105,12 @@ func _on_choice_selection_changed(index: int) -> void:
 	
 	for i in labels.size():
 		var label := labels[i] as Label
+		var choice: DialogueChoice = DialogueManager.current_choices[i]
 		
 		if i == index:
-			label.text = "> " + DialogueManager.current_choices[i].get("text", "Choice")
+			label.text = "> " + choice.text
 		else:
-			label.text = "  " + DialogueManager.current_choices[i].get("text", "Choice")
+			label.text = "  " + choice.text
 
 func _on_dialogue_finished() -> void:
 	hide()

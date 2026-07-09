@@ -6,6 +6,8 @@ signal choices_requested(choices: Array)
 signal choice_selection_changed(index: int)
 signal dialogue_finished
 
+signal dialogue_event_triggered(event_id: String)
+
 signal choices_ready(choices: Array)
 
 enum DialogueState {
@@ -19,8 +21,9 @@ var current_speaker: DialogueSpeaker = null
 
 var state: DialogueState = DialogueState.INACTIVE
 
-var dialogue_data: Dictionary = {}
+var dialogue_data: DialogueData = null
 var current_node_id: String = ""
+var current_node: DialogueNode = null
 var is_active: bool = false
 
 var lock_movement: bool = true
@@ -28,14 +31,14 @@ var lock_movement: bool = true
 var current_choices: Array = []
 var selected_choice_index: int = 0
 
-func start_dialogue(data: Dictionary, start_node: String = "", should_lock_movement: bool = true) -> void:
-	if data.is_empty():
-		push_error("Dialogue data is empty.")
+func start_dialogue(data: DialogueData, start_node: String = "", should_lock_movement: bool = true) -> void:
+	if data == null:
+		push_error("Dialogue data is null.")
 		return
 	
 	dialogue_data = data
-	current_speaker = DialogueLoader.load_speaker(dialogue_data)
-	current_node_id = start_node if start_node != "" else dialogue_data.get("start", "")
+	current_speaker = data.speaker
+	current_node_id = start_node if start_node != "" else data.start_node_id
 	is_active = true
 	lock_movement = should_lock_movement
 	state = DialogueState.WAITING_INPUT
@@ -90,19 +93,21 @@ func confirm_selection() -> void:
 	if current_choices.is_empty():
 		return
 	
-	var choice: Dictionary = current_choices[selected_choice_index]
+	var choice: DialogueChoice = current_choices[selected_choice_index]
+	_trigger_choice_event(choice)
 	
-	if choice.has("next"):
-		current_node_id = choice["next"]
+	if choice.next_node_id != "":
+		current_node_id = choice.next_node_id
 		_show_current_node()
 	else:
 		end_dialogue()
 
 func end_dialogue() -> void:
 	is_active = false
-	dialogue_data = {}
-	current_speaker = null
+	dialogue_data = null
 	current_node_id = ""
+	current_node = null
+	current_speaker = null
 	current_choices = []
 	selected_choice_index = 0
 	lock_movement = true
@@ -114,12 +119,17 @@ func _show_current_node() -> void:
 	selected_choice_index = 0
 	state = DialogueState.WAITING_INPUT
 	
-	var node := _get_current_node()
-	var line_data := _build_line_data(node)
-	line_changed.emit(line_data)
+	current_node = _get_current_node()
 	
-	if node.has("choices"):
-		current_choices = node["choices"]
+	if current_node == null:
+		end_dialogue()
+		return
+	
+	line_changed.emit(current_node)
+	_trigger_node_event(current_node)
+	
+	if current_node.choices.size() > 0:
+		current_choices = current_node.choices
 
 func request_choices_after_text_finished() -> void:
 	if current_choices.is_empty():
@@ -130,17 +140,11 @@ func request_choices_after_text_finished() -> void:
 	choices_requested.emit(current_choices)
 	choice_selection_changed.emit(selected_choice_index)
 
-func _get_current_node() -> Dictionary:
-	if not dialogue_data.has("nodes"):
-		return {}
+func _get_current_node() -> DialogueNode:
+	if dialogue_data == null:
+		return null
 	
-	var nodes: Dictionary = dialogue_data["nodes"]
-	
-	if not nodes.has(current_node_id):
-		push_error("Dialogue node not found: " + current_node_id)
-		return {}
-	
-	return nodes[current_node_id]
+	return dialogue_data.get_node_by_id(current_node_id)
 
 
 func set_typing_state() -> void:
@@ -162,26 +166,35 @@ func is_choosing() -> bool:
 	return state == DialogueState.CHOOSING
 
 func _go_to_next_node() -> void:
-	var node := _get_current_node()
-	
-	if node.has("end") and node["end"] == true:
+	if current_node == null:
 		end_dialogue()
 		return
 	
-	if node.has("next"):
-		current_node_id = node["next"]
+	if current_node.end:
+		end_dialogue()
+		return
+	
+	if current_node.next_node_id != "":
+		current_node_id = current_node.next_node_id
 		_show_current_node()
 	else:
 		end_dialogue()
 
-func _build_line_data(node: Dictionary) -> Dictionary:
-	var line_data := node.duplicate()
+
+func _trigger_node_event(node: DialogueNode) -> void:
+	if node == null:
+		return
 	
-	if current_speaker != null:
-		line_data["speaker"] = current_speaker.name
-		line_data["portrait"] = current_speaker.portrait_path
-	else:
-		line_data["speaker"] = ""
-		line_data["portrait"] = ""
+	if node.event_id == "":
+		return
 	
-	return line_data
+	dialogue_event_triggered.emit(node.event_id)
+
+func _trigger_choice_event(choice: DialogueChoice) -> void:
+	if choice == null:
+		return
+	
+	if choice.event_id == "":
+		return
+	
+	dialogue_event_triggered.emit(choice.event_id)

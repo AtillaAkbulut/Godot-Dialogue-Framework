@@ -11,4 +11,8 @@ func start_dialogue() -> void:
 		return
 	
 	var data := DialogueLoader.load_dialogue(dialogue_file)
+	
+	if data == null:
+		return
+	
 	DialogueManager.start_dialogue(data, start_node, lock_movement)

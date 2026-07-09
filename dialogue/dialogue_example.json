@@ -14,6 +14,7 @@
 	  "choices": [
 		{
 		  "text": "Yes.",
+		  "event": "choice_yes_selected",
 		  "next": "yes"
 		},
 		{
@@ -24,6 +25,7 @@
 	},
 	"yes": {
 	  "text": "Then follow the road to the station.",
+	  "event": "old_man_help_accepted",
 	  "end": true
 	},
 	"no": {
