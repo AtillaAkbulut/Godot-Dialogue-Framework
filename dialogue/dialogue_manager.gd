@@ -15,6 +15,8 @@ enum DialogueState {
 	CHOOSING
 }
 
+var current_speaker: DialogueSpeaker = null
+
 var state: DialogueState = DialogueState.INACTIVE
 
 var dialogue_data: Dictionary = {}
@@ -32,6 +34,7 @@ func start_dialogue(data: Dictionary, start_node: String = "", should_lock_movem
 		return
 	
 	dialogue_data = data
+	current_speaker = DialogueLoader.load_speaker(dialogue_data)
 	current_node_id = start_node if start_node != "" else dialogue_data.get("start", "")
 	is_active = true
 	lock_movement = should_lock_movement
@@ -98,6 +101,7 @@ func confirm_selection() -> void:
 func end_dialogue() -> void:
 	is_active = false
 	dialogue_data = {}
+	current_speaker = null
 	current_node_id = ""
 	current_choices = []
 	selected_choice_index = 0
@@ -171,10 +175,13 @@ func _go_to_next_node() -> void:
 		end_dialogue()
 
 func _build_line_data(node: Dictionary) -> Dictionary:
-	var speaker_data: Dictionary = dialogue_data.get("speaker", {})
-	
 	var line_data := node.duplicate()
-	line_data["speaker"] = speaker_data.get("name", "")
-	line_data["portrait"] = speaker_data.get("portrait", "")
+	
+	if current_speaker != null:
+		line_data["speaker"] = current_speaker.name
+		line_data["portrait"] = current_speaker.portrait_path
+	else:
+		line_data["speaker"] = ""
+		line_data["portrait"] = ""
 	
 	return line_data

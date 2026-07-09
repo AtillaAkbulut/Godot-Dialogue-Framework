@@ -16,3 +16,11 @@ static func load_dialogue(file_path: String) -> Dictionary:
 		return {}
 	
 	return parsed
+
+static func load_speaker(data: Dictionary) -> DialogueSpeaker:
+	var speaker_data: Dictionary = data.get("speaker", {})
+	
+	return DialogueSpeaker.new(
+		speaker_data.get("name", ""),
+		speaker_data.get("portrait", "")
+	)
