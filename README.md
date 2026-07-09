@@ -137,6 +137,17 @@ react to dialogue events rather than being implemented directly inside the dialo
 
 <hr>
 
+<h2>How to Use</h2>
+
+<ol>
+  <li>Add <code>DialogueManager</code> as an Autoload.</li>
+  <li>Add <code>DialogueUI.tscn</code> to your scene.</li>
+  <li>Create a dialogue JSON file.</li>
+  <li>Add <code>DialogueComponent</code> to an NPC.</li>
+  <li>Assign the JSON file in the Inspector.</li>
+  <li>Use <code>interact</code> input to start dialogue.</li>
+</ol>
+
 <h2>Roadmap</h2>
 
 <h3>v0.3</h3>
