@@ -21,4 +21,3 @@ shape = SubResource("RectangleShape2D_rg6at")
 script = ExtResource("2_t60mo")
 dialogue_file = "res://dialogue/dialogue_example.json"
 start_node = null
-lock_movement = false
