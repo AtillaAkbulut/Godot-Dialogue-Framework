@@ -10,4 +10,5 @@ func start_dialogue() -> void:
 		push_error("Dialogue file is empty on: " + owner.name)
 		return
 	
-	DialogueManager.start_dialogue(dialogue_file, start_node, lock_movement)
+	var data := DialogueLoader.load_dialogue(dialogue_file)
+	DialogueManager.start_dialogue(data, start_node, lock_movement)

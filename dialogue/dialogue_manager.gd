@@ -26,20 +26,12 @@ var lock_movement: bool = true
 var current_choices: Array = []
 var selected_choice_index: int = 0
 
-func start_dialogue(file_path: String, start_node: String = "", should_lock_movement: bool = true) -> void:
-	var file := FileAccess.open(file_path, FileAccess.READ)
-	if file == null:
-		push_error("Dialogue file not found: " + file_path)
+func start_dialogue(data: Dictionary, start_node: String = "", should_lock_movement: bool = true) -> void:
+	if data.is_empty():
+		push_error("Dialogue data is empty.")
 		return
 	
-	var text := file.get_as_text()
-	var parsed = JSON.parse_string(text)
-	
-	if typeof(parsed) != TYPE_DICTIONARY:
-		push_error("Invalid dialogue JSON.")
-		return
-	
-	dialogue_data = parsed
+	dialogue_data = data
 	current_node_id = start_node if start_node != "" else dialogue_data.get("start", "")
 	is_active = true
 	lock_movement = should_lock_movement
