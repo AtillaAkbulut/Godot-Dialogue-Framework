@@ -6,54 +6,62 @@
   "start": "intro",
   "nodes": {
 	"intro": {
-	  "text": "Hey. {player_name} You look lost and you currently haver {gold} coins.",
-	  "commands": [
-		{
-			"type": "set_text_speed",
-			"value": 15
-		}
-	  ],
-	  "next": "question"
-	},
-	"question": {
-	  "text": "what do you want to do?",
+	  "text": "Hello, {player_name}. What do you want to do?",
 	  "choices": [
 		{
-		  "text": "pay {gold} coins",
-		  "next": "yes",
-		  "events": [
-			"choice_yes_selected",
-            "tutorial_choice_used"
+		  "text": "Give the old key.",
+		  "next": "give_key",
+		  "conditions": [
+			"has_old_key",
+            "!key_already_given"
 		  ]
 		},
 		{
-		  "text": "leave, {player_name}",
-		  "next": "no",
-		  "events": [
-            "choice_no_selected"
+		  "text": "Ask about the quest.",
+		  "next": "ask_quest",
+		  "conditions": [
+			"quest_1_active",
+            "!key_already_given"
 		  ]
+		},
+		{
+		  "text": "Ask about the key you returned.",
+		  "next": "after_key_given",
+		  "condition": "key_already_given"
+		},
+		{
+		  "text": "Leave.",
+		  "next": "leave"
 		}
 	  ]
 	},
-	"yes": {
-	  "text": "Then follow the road to the station.",
-	  "commands": [
-		{
-			"type": "set_text_speed",
-			"value": 80
-		}
-	  ],
+
+	"give_key": {
+	  "text": "You found it. Thank you. I thought I had lost it forever.",
 	  "events": [
-		"old_man_help_accepted",
-        "achievement_first_help"
+		"old_key_given",
+        "quest_1_completed"
 	  ],
 	  "end": true
 	},
-	"no": {
-	  "text": "Alright. Stay safe.",
-	  "events": [
-        "old_man_help_declined"
+
+	"ask_quest": {
+	  "text": "I am still waiting for the old key. Please let me know if you find it.",
+	  "conditions": [
+		"quest_1_active",
+        "!key_already_given"
 	  ],
+	  "end": true
+	},
+
+	"after_key_given": {
+	  "text": "Thanks again for returning the key. You really helped me.",
+	  "condition": "key_already_given",
+	  "end": true
+	},
+
+	"leave": {
+	  "text": "Alright. Come back if you need anything.",
 	  "end": true
 	}
   }

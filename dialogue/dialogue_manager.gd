@@ -152,15 +152,18 @@ func _show_current_node() -> void:
 		return
 	
 	_request_commands(current_node.commands)
+	
 	var resolved_text := DialogueVariableResolver.resolve_text(
 		current_node.text
 	)
-
+	
 	line_changed.emit(current_node, resolved_text)
 	_trigger_events(current_node.events)
 	
 	if current_node.choices.size() > 0:
-		current_choices = current_node.choices
+		current_choices = _filter_available_choices(
+			current_node.choices
+		)
 
 func request_choices_after_text_finished() -> void:
 	if current_choices.is_empty():
@@ -168,15 +171,16 @@ func request_choices_after_text_finished() -> void:
 		return
 	
 	state = DialogueState.CHOOSING
+	
 	var resolved_choice_texts := _resolve_choice_texts(
 		current_choices
 	)
-
+	
 	choices_requested.emit(
 		current_choices,
 		resolved_choice_texts
 	)
-
+	
 	choice_selection_changed.emit(
 		selected_choice_index,
 		resolved_choice_texts
@@ -257,3 +261,19 @@ func _resolve_choice_texts(choices: Array) -> Array:
 		resolved_texts.append(resolved_text)
 	
 	return resolved_texts
+
+func _filter_available_choices(choices: Array) -> Array:
+	var available_choices: Array = []
+	
+	for choice in choices:
+		if choice == null:
+			continue
+		
+		if not choice is DialogueChoice:
+			push_warning("Invalid dialogue choice object.")
+			continue
+		
+		if DialogueConditionResolver.evaluate_all(choice.conditions):
+			available_choices.append(choice)
+	
+	return available_choices

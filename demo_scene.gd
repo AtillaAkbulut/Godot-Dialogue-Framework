@@ -14,8 +14,9 @@ func _ready() -> void:
 	GameState.set_variable("player_name", "Atilla")
 	GameState.set_variable("gold", 120)
 	
-	GameState.set_flag("quest_1_active", true)
+	GameState.set_flag("quest_1_active", false)
 	GameState.set_flag("has_old_key", false)
+	GameState.set_flag("key_already_given", false)
 	
 	DialogueManager.dialogue_event_triggered.connect(
 		_on_dialogue_event_triggered
@@ -25,3 +26,11 @@ func _ready() -> void:
 
 func _on_dialogue_event_triggered(event_id: String) -> void:
 	print("Dialogue Event Triggered: ", event_id)
+
+	match event_id:
+		"old_key_given":
+			GameState.set_flag("has_old_key", false)
+			GameState.set_flag("key_already_given", true)
+
+		"quest_1_completed":
+			GameState.set_flag("quest_1_active", false)

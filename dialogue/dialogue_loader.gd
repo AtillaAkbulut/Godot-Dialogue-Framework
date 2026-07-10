@@ -63,7 +63,8 @@ static func load_choices(raw_choices: Array) -> Array:
 		var choice := DialogueChoice.new(
 			raw_choice.get("text", ""),
 			raw_choice.get("next", ""),
-			_load_events(raw_choice)
+			_load_events(raw_choice),
+			_load_conditions(raw_choice)
 		)
 		
 		choices.append(choice)
@@ -105,3 +106,12 @@ static func _load_commands(data: Dictionary) -> Array:
 		commands.append(command)
 	
 	return commands
+
+static func _load_conditions(data: Dictionary) -> Array:
+	if data.has("conditions") and typeof(data["conditions"]) == TYPE_ARRAY:
+		return data["conditions"].duplicate()
+	
+	if data.has("condition") and typeof(data["condition"]) == TYPE_STRING:
+		return [data["condition"]]
+	
+	return []
