@@ -4,113 +4,69 @@
 	"portrait": "res://portraits/old_man.png"
   },
 
-  "start": "default_intro",
+  "start": "first_meeting",
 
   "start_rules": [
 	{
 	  "conditions": [
-        "key_already_given"
+        "talked_to_old_man"
 	  ],
-	  "start": "after_quest_intro"
-	},
-	{
-	  "conditions": [
-		"quest_1_active",
-        "has_old_key"
-	  ],
-	  "start": "key_found_intro"
-	},
-	{
-	  "conditions": [
-        "quest_1_active"
-	  ],
-	  "start": "quest_intro"
+	  "start": "returning_player"
 	}
   ],
 
   "nodes": {
-	"default_intro": {
-	  "text": "Hello, {player_name}. Nice weather today.",
+	"first_meeting": {
+	  "text": "I don't think we've met before. What's your name?",
 	  "choices": [
 		{
-		  "text": "Leave.",
-		  "next": "leave"
-		}
-	  ]
-	},
-
-	"quest_intro": {
-	  "text": "Have you found my old key yet?",
-	  "choices": [
-		{
-		  "text": "Not yet.",
-		  "next": "not_found"
+		  "text": "My name is {player_name}.",
+		  "next": "introduction"
 		},
 		{
-		  "text": "Leave.",
-		  "next": "leave"
+		  "text": "I'd rather not say.",
+		  "next": "refuse_name"
 		}
 	  ]
 	},
 
-	"key_found_intro": {
-	  "text": "Is that my old key in your hand?",
-	  "choices": [
-		{
-		  "text": "Give the old key.",
-		  "next": "give_key",
-		  "conditions": [
-			"has_old_key",
-            "!key_already_given"
-		  ]
-		},
-		{
-		  "text": "Keep it for now.",
-		  "next": "keep_key"
-		}
-	  ]
-	},
-
-	"after_quest_intro": {
-	  "text": "Thanks again for bringing my key back.",
-	  "choices": [
-		{
-		  "text": "You're welcome.",
-		  "next": "welcome"
-		},
-		{
-		  "text": "Leave.",
-		  "next": "leave"
-		}
-	  ]
-	},
-
-	"give_key": {
-	  "text": "You found it. Thank you.",
+	"introduction": {
+	  "text": "Nice to meet you, {player_name}. I'll remember that.",
 	  "events": [
-		"old_key_given",
-        "quest_1_completed"
+        "old_man_met_player"
 	  ],
 	  "end": true
 	},
 
-	"not_found": {
-	  "text": "Please keep looking. It must be somewhere nearby.",
+	"refuse_name": {
+	  "text": "That's alright. Maybe another time.",
+	  "events": [
+        "old_man_met_player"
+	  ],
 	  "end": true
 	},
 
-	"keep_key": {
-	  "text": "Why are you holding onto it?",
-	  "end": true
+	"returning_player": {
+	  "text": "Good to see you again, {player_name}.",
+	  "choices": [
+		{
+		  "text": "How have you been?",
+		  "next": "ask_wellbeing"
+		},
+		{
+		  "text": "I have to go.",
+		  "next": "leave"
+		}
+	  ]
 	},
 
-	"welcome": {
-	  "text": "I won't forget what you did.",
+	"ask_wellbeing": {
+	  "text": "I've been well. It's nice that you came back.",
 	  "end": true
 	},
 
 	"leave": {
-	  "text": "Take care.",
+	  "text": "Take care, {player_name}.",
 	  "end": true
 	}
   }
