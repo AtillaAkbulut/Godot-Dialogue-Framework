@@ -49,7 +49,11 @@ func start_dialogue(data: DialogueData, start_node: String = "", should_lock_mov
 	
 	dialogue_data = data
 	current_speaker = data.speaker
-	current_node_id = start_node if start_node != "" else data.start_node_id
+	if start_node != "":
+		current_node_id = start_node
+	else:
+		current_node_id = data.resolve_start_node_id()
+		
 	is_active = true
 	lock_movement = should_lock_movement
 	state = DialogueState.WAITING_INPUT

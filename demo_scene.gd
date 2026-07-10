@@ -16,7 +16,7 @@ func _ready() -> void:
 	
 	GameState.set_flag("quest_1_active", false)
 	GameState.set_flag("has_old_key", false)
-	GameState.set_flag("key_already_given", false)
+	GameState.set_flag("key_already_given", true)
 	
 	DialogueManager.dialogue_event_triggered.connect(
 		_on_dialogue_event_triggered

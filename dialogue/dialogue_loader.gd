@@ -21,8 +21,14 @@ static func _build_dialogue_data(data: Dictionary) -> DialogueData:
 	var speaker := load_speaker(data)
 	var start_node_id: String = data.get("start", "")
 	var nodes := _load_nodes(data.get("nodes", {}))
+	var start_rules := _load_start_rules(data)
 	
-	return DialogueData.new(speaker, start_node_id, nodes)
+	return DialogueData.new(
+		speaker,
+		start_node_id,
+		nodes,
+		start_rules
+	)
 
 static func load_speaker(data: Dictionary) -> DialogueSpeaker:
 	var speaker_data: Dictionary = data.get("speaker", {})
@@ -115,3 +121,29 @@ static func _load_conditions(data: Dictionary) -> Array:
 		return [data["condition"]]
 	
 	return []
+
+static func _load_start_rules(data: Dictionary) -> Array:
+	var rules: Array = []
+	var raw_rules = data.get("start_rules", [])
+	
+	if typeof(raw_rules) != TYPE_ARRAY:
+		return rules
+	
+	for raw_rule in raw_rules:
+		if typeof(raw_rule) != TYPE_DICTIONARY:
+			continue
+		
+		var start_node_id: String = raw_rule.get("start", "")
+		
+		if start_node_id.is_empty():
+			push_warning("Dialogue start rule is missing a start node.")
+			continue
+		
+		var rule := DialogueStartRule.new(
+			start_node_id,
+			_load_conditions(raw_rule)
+		)
+		
+		rules.append(rule)
+	
+	return rules

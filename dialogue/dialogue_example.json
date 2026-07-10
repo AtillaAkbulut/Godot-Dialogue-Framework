@@ -3,10 +3,58 @@
 	"name": "Old Man",
 	"portrait": "res://portraits/old_man.png"
   },
-  "start": "intro",
+
+  "start": "default_intro",
+
+  "start_rules": [
+	{
+	  "conditions": [
+        "key_already_given"
+	  ],
+	  "start": "after_quest_intro"
+	},
+	{
+	  "conditions": [
+		"quest_1_active",
+        "has_old_key"
+	  ],
+	  "start": "key_found_intro"
+	},
+	{
+	  "conditions": [
+        "quest_1_active"
+	  ],
+	  "start": "quest_intro"
+	}
+  ],
+
   "nodes": {
-	"intro": {
-	  "text": "Hello, {player_name}. What do you want to do?",
+	"default_intro": {
+	  "text": "Hello, {player_name}. Nice weather today.",
+	  "choices": [
+		{
+		  "text": "Leave.",
+		  "next": "leave"
+		}
+	  ]
+	},
+
+	"quest_intro": {
+	  "text": "Have you found my old key yet?",
+	  "choices": [
+		{
+		  "text": "Not yet.",
+		  "next": "not_found"
+		},
+		{
+		  "text": "Leave.",
+		  "next": "leave"
+		}
+	  ]
+	},
+
+	"key_found_intro": {
+	  "text": "Is that my old key in your hand?",
 	  "choices": [
 		{
 		  "text": "Give the old key.",
@@ -17,17 +65,18 @@
 		  ]
 		},
 		{
-		  "text": "Ask about the quest.",
-		  "next": "ask_quest",
-		  "conditions": [
-			"quest_1_active",
-            "!key_already_given"
-		  ]
-		},
+		  "text": "Keep it for now.",
+		  "next": "keep_key"
+		}
+	  ]
+	},
+
+	"after_quest_intro": {
+	  "text": "Thanks again for bringing my key back.",
+	  "choices": [
 		{
-		  "text": "Ask about the key you returned.",
-		  "next": "after_key_given",
-		  "condition": "key_already_given"
+		  "text": "You're welcome.",
+		  "next": "welcome"
 		},
 		{
 		  "text": "Leave.",
@@ -37,7 +86,7 @@
 	},
 
 	"give_key": {
-	  "text": "You found it. Thank you. I thought I had lost it forever.",
+	  "text": "You found it. Thank you.",
 	  "events": [
 		"old_key_given",
         "quest_1_completed"
@@ -45,23 +94,23 @@
 	  "end": true
 	},
 
-	"ask_quest": {
-	  "text": "I am still waiting for the old key. Please let me know if you find it.",
-	  "conditions": [
-		"quest_1_active",
-        "!key_already_given"
-	  ],
+	"not_found": {
+	  "text": "Please keep looking. It must be somewhere nearby.",
 	  "end": true
 	},
 
-	"after_key_given": {
-	  "text": "Thanks again for returning the key. You really helped me.",
-	  "condition": "key_already_given",
+	"keep_key": {
+	  "text": "Why are you holding onto it?",
+	  "end": true
+	},
+
+	"welcome": {
+	  "text": "I won't forget what you did.",
 	  "end": true
 	},
 
 	"leave": {
-	  "text": "Alright. Come back if you need anything.",
+	  "text": "Take care.",
 	  "end": true
 	}
   }
