@@ -4,6 +4,9 @@ var flags: Dictionary = {}
 var variables: Dictionary = {}
 
 
+
+
+
 func set_variable(variable_name: String, value) -> void:
 	if variable_name.is_empty():
 		push_warning("Variable name cannot be empty.")
