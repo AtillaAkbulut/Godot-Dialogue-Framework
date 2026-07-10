@@ -96,25 +96,31 @@ func _on_line_changed(
 	is_typing = true
 	text_label.text = ""
 
-func _on_choices_requested(choices: Array) -> void:
+func _on_choices_requested(
+	choices: Array,
+	resolved_choice_texts: Array
+) -> void:
 	_clear_choices()
 	
-	for choice in choices:
+	for i in choices.size():
 		var label := Label.new()
-		label.text = choice.text
+		label.text = resolved_choice_texts[i]
 		choices_container.add_child(label)
 
-func _on_choice_selection_changed(index: int) -> void:
+func _on_choice_selection_changed(
+	index: int,
+	resolved_choice_texts: Array
+) -> void:
 	var labels := choices_container.get_children()
 	
 	for i in labels.size():
 		var label := labels[i] as Label
-		var choice: DialogueChoice = DialogueManager.current_choices[i]
+		var choice_text: String = resolved_choice_texts[i]
 		
 		if i == index:
-			label.text = "> " + choice.text
+			label.text = "> " + choice_text
 		else:
-			label.text = "  " + choice.text
+			label.text = "  " + choice_text
 
 func _on_dialogue_finished() -> void:
 	hide()

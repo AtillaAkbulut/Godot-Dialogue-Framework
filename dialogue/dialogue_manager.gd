@@ -5,8 +5,14 @@ signal line_changed(
 	dialogue_node: DialogueNode,
 	resolved_text: String
 )
-signal choices_requested(choices: Array)
-signal choice_selection_changed(index: int)
+signal choices_requested(
+	choices: Array,
+	resolved_choice_texts: Array
+)
+signal choice_selection_changed(
+	index: int,
+	resolved_choice_texts: Array
+)
 signal dialogue_finished
 
 signal dialogue_event_triggered(event_id: String)
@@ -81,7 +87,14 @@ func move_selection_up() -> void:
 	if selected_choice_index < 0:
 		selected_choice_index = current_choices.size() - 1
 	
-	choice_selection_changed.emit(selected_choice_index)
+	var resolved_choice_texts := _resolve_choice_texts(
+		current_choices
+	)
+
+	choice_selection_changed.emit(
+		selected_choice_index,
+		resolved_choice_texts
+	)
 
 func move_selection_down() -> void:
 	if current_choices.is_empty():
@@ -92,7 +105,14 @@ func move_selection_down() -> void:
 	if selected_choice_index >= current_choices.size():
 		selected_choice_index = 0
 	
-	choice_selection_changed.emit(selected_choice_index)
+	var resolved_choice_texts := _resolve_choice_texts(
+		current_choices
+	)
+
+	choice_selection_changed.emit(
+		selected_choice_index,
+		resolved_choice_texts
+	)
 
 func confirm_selection() -> void:
 	if current_choices.is_empty():
@@ -148,8 +168,19 @@ func request_choices_after_text_finished() -> void:
 		return
 	
 	state = DialogueState.CHOOSING
-	choices_requested.emit(current_choices)
-	choice_selection_changed.emit(selected_choice_index)
+	var resolved_choice_texts := _resolve_choice_texts(
+		current_choices
+	)
+
+	choices_requested.emit(
+		current_choices,
+		resolved_choice_texts
+	)
+
+	choice_selection_changed.emit(
+		selected_choice_index,
+		resolved_choice_texts
+	)
 
 func _get_current_node() -> DialogueNode:
 	if dialogue_data == null:
@@ -210,3 +241,19 @@ func _request_commands(commands: Array) -> void:
 			continue
 		
 		dialogue_command_requested.emit(command)
+
+func _resolve_choice_texts(choices: Array) -> Array:
+	var resolved_texts: Array = []
+	
+	for choice in choices:
+		if choice == null:
+			resolved_texts.append("")
+			continue
+		
+		var resolved_text := DialogueVariableResolver.resolve_text(
+			choice.text
+		)
+		
+		resolved_texts.append(resolved_text)
+	
+	return resolved_texts

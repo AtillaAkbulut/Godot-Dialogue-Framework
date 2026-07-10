@@ -16,10 +16,10 @@
 	  "next": "question"
 	},
 	"question": {
-	  "text": "Do you need help?",
+	  "text": "what do you want to do?",
 	  "choices": [
 		{
-		  "text": "Yes.",
+		  "text": "pay {gold} coins",
 		  "next": "yes",
 		  "events": [
 			"choice_yes_selected",
@@ -27,7 +27,7 @@
 		  ]
 		},
 		{
-		  "text": "No.",
+		  "text": "leave, {player_name}",
 		  "next": "no",
 		  "events": [
             "choice_no_selected"
