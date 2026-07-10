@@ -59,7 +59,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_dialogue_started() -> void:
 	show()
 
-func _on_line_changed(dialogue_node: DialogueNode) -> void:
+func _on_line_changed(
+	dialogue_node: DialogueNode,
+	resolved_text: String
+) -> void:
 	_clear_choices()
 	
 	DialogueManager.set_typing_state()
@@ -88,7 +91,7 @@ func _on_line_changed(dialogue_node: DialogueNode) -> void:
 		portrait_rect.texture = null
 		portrait_rect.hide()
 	
-	full_text = dialogue_node.text
+	full_text = resolved_text
 	visible_character_count = 0.0
 	is_typing = true
 	text_label.text = ""

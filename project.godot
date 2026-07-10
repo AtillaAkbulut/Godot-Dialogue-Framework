@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DialogueManager="*uid://j87hh8fstkht"
+GameState="*uid://b1cmt6blvdk68"
 
 [input]
 

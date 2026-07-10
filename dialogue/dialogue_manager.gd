@@ -1,7 +1,10 @@
 extends Node
 
 signal dialogue_started
-signal line_changed(line_data: Dictionary)
+signal line_changed(
+	dialogue_node: DialogueNode,
+	resolved_text: String
+)
 signal choices_requested(choices: Array)
 signal choice_selection_changed(index: int)
 signal dialogue_finished
@@ -129,7 +132,11 @@ func _show_current_node() -> void:
 		return
 	
 	_request_commands(current_node.commands)
-	line_changed.emit(current_node)
+	var resolved_text := DialogueVariableResolver.resolve_text(
+		current_node.text
+	)
+
+	line_changed.emit(current_node, resolved_text)
 	_trigger_events(current_node.events)
 	
 	if current_node.choices.size() > 0:

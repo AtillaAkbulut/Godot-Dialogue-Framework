@@ -6,7 +6,7 @@
   "start": "intro",
   "nodes": {
 	"intro": {
-	  "text": "Hey. You look lost.",
+	  "text": "Hey. {player_name} You look lost and you currently haver {gold} coins.",
 	  "commands": [
 		{
 			"type": "set_text_speed",
