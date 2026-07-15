@@ -9,6 +9,25 @@
   "start_rules": [
 	{
 	  "conditions": [
+        "old_key_quest_completed"
+	  ],
+	  "start": "quest_completed_intro"
+	},
+	{
+	  "conditions": [
+		"old_key_quest_active",
+        "has_old_key"
+	  ],
+	  "start": "key_found_intro"
+	},
+	{
+	  "conditions": [
+        "old_key_quest_active"
+	  ],
+	  "start": "quest_active_intro"
+	},
+	{
+	  "conditions": [
         "talked_to_old_man"
 	  ],
 	  "start": "returning_player"
@@ -47,11 +66,11 @@
 	},
 
 	"returning_player": {
-	  "text": "Good to see you again, {player_name}.",
+	  "text": "Good to see you again, {player_name}. I could use some help.",
 	  "choices": [
 		{
-		  "text": "How have you been?",
-		  "next": "ask_wellbeing"
+		  "text": "What happened?",
+		  "next": "offer_quest"
 		},
 		{
 		  "text": "I have to go.",
@@ -60,8 +79,100 @@
 	  ]
 	},
 
-	"ask_wellbeing": {
-	  "text": "I've been well. It's nice that you came back.",
+	"offer_quest": {
+	  "text": "I lost an old key somewhere nearby. Could you find it?",
+	  "choices": [
+		{
+		  "text": "I'll look for it.",
+		  "next": "accept_quest"
+		},
+		{
+		  "text": "Not right now.",
+		  "next": "decline_quest"
+		}
+	  ]
+	},
+
+	"accept_quest": {
+	  "text": "Thank you. It means a lot to me.",
+	  "events": [
+        "old_key_quest_started"
+	  ],
+	  "end": true
+	},
+
+	"decline_quest": {
+	  "text": "I understand. Let me know if you change your mind.",
+	  "end": true
+	},
+
+	"quest_active_intro": {
+	  "text": "Have you found my old key yet?",
+	  "choices": [
+		{
+		  "text": "Not yet.",
+		  "next": "not_found"
+		},
+		{
+		  "text": "I have to go.",
+		  "next": "leave"
+		}
+	  ]
+	},
+
+	"key_found_intro": {
+	  "text": "Is that my old key in your hand?",
+	  "choices": [
+		{
+		  "text": "Give the old key.",
+		  "next": "give_key",
+		  "conditions": [
+			"has_old_key",
+            "!key_already_given"
+		  ]
+		},
+		{
+		  "text": "Keep it for now.",
+		  "next": "keep_key"
+		}
+	  ]
+	},
+
+	"give_key": {
+	  "text": "You found it. Thank you.",
+	  "events": [
+		"old_key_given",
+        "old_key_quest_completed"
+	  ],
+	  "end": true
+	},
+
+	"quest_completed_intro": {
+	  "text": "Thanks again for bringing my key back, {player_name}.",
+	  "choices": [
+		{
+		  "text": "You're welcome.",
+		  "next": "welcome"
+		},
+		{
+		  "text": "Leave.",
+		  "next": "leave"
+		}
+	  ]
+	},
+
+	"not_found": {
+	  "text": "Please keep looking. It must be somewhere nearby.",
+	  "end": true
+	},
+
+	"keep_key": {
+	  "text": "Why are you holding onto it?",
+	  "end": true
+	},
+
+	"welcome": {
+	  "text": "I won't forget what you did.",
 	  "end": true
 	},
 
