@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var quest_example: QuestExample = $QuestExample
 @onready var save_example: SaveExample = $SaveExample
+@onready var debug_state_label: Label = $CanvasLayer/Control/DebugStateLabel
 
 
 func _ready() -> void:
@@ -140,3 +141,26 @@ func _print_current_state() -> void:
 		GameState.get_variable("player_name", "Unknown")
 	)
 	print("--------------------------")
+	_update_debug_state_ui()
+
+func _update_debug_state_ui() -> void:
+	if debug_state_label == null:
+		return
+	
+	var quest_state_text := "NOT_STARTED"
+	
+	if quest_example.is_quest_active("old_key_quest"):
+		quest_state_text = "ACTIVE"
+	elif quest_example.is_quest_completed("old_key_quest"):
+		quest_state_text = "COMPLETED"
+	
+	debug_state_label.text = (
+		"Talked to NPC: "
+		+ str(GameState.has_flag("talked_to_old_man"))
+		+ "\nQuest: "
+		+ quest_state_text
+		+ "\nHas Key: "
+		+ str(GameState.has_flag("has_old_key"))
+		+ "\nKey Given: "
+		+ str(GameState.has_flag("key_already_given"))
+	)
