@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://nbc2205s60w8" path="res://demo/demo_npc.tscn" id="3_ctgmk"]
 [ext_resource type="PackedScene" uid="uid://dkbl8nhed01pt" path="res://demo/demo_player.tscn" id="4_1hm1i"]
 [ext_resource type="Script" uid="uid://dru30sgqu3giu" path="res://demo/quest_example.gd" id="5_1hm1i"]
+[ext_resource type="Script" uid="uid://iqglrjb6ty7f" path="res://demo/save_example.gd" id="6_om45m"]
 
 [node name="demo_scene" type="Node2D" unique_id=331255201]
 script = ExtResource("1_8n7uv")
@@ -19,3 +20,6 @@ position = Vector2(623, 212)
 
 [node name="QuestExample" type="Node" parent="." unique_id=84863422]
 script = ExtResource("5_1hm1i")
+
+[node name="SaveExample" type="Node" parent="." unique_id=378520163]
+script = ExtResource("6_om45m")

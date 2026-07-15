@@ -52,3 +52,24 @@ func is_quest_active(quest_id: String) -> bool:
 
 func is_quest_completed(quest_id: String) -> bool:
 	return get_quest_state(quest_id) == QuestState.COMPLETED
+
+
+func get_save_data() -> Dictionary:
+	return {
+		"quest_states": quest_states.duplicate(true)
+	}
+
+
+func load_save_data(data: Dictionary) -> void:
+	var loaded_quest_states = data.get("quest_states", {})
+	
+	if typeof(loaded_quest_states) != TYPE_DICTIONARY:
+		push_warning("Quest save data contains invalid quest states.")
+		quest_states = {}
+		return
+	
+	quest_states = loaded_quest_states.duplicate(true)
+
+
+func reset_all_quests() -> void:
+	quest_states.clear()
