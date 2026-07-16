@@ -1,12 +1,24 @@
 extends CanvasLayer
 
-@onready var panel: Panel = $Panel
-@onready var speaker_label: Label = $Panel/VBoxContainer/SpeakerLabel
-@onready var text_label: Label = $Panel/VBoxContainer/TextLabel
-@onready var choices_container: VBoxContainer = $Panel/VBoxContainer/ChoicesContainer
-@onready var portrait_rect: TextureRect = $Panel/PortraitRect
+@onready var panel: NinePatchRect = $Root/Panel
+@onready var speaker_label: Label = $Root/Panel/SpeakerLabel
+@onready var text_label: Label = $Root/Panel/Content/TextLabel
+@onready var choices_container: VBoxContainer = $Root/Panel/Content/Choices
+@onready var portrait_rect: TextureRect = $Root/Panel/Portrait
 
 @export var typewriter_speed: float = 20.0
+
+@export var choice_normal_style: StyleBox
+@export var choice_selected_style: StyleBox
+
+@export_group("Choice Settings")
+
+@export var choice_button_size: Vector2 = Vector2(220, 40)
+
+
+@export_group("Portrait Settings")
+
+@export var portrait_size: Vector2 = Vector2(160, 200)
 
 var full_text: String = ""
 var visible_character_count: float = 0.0
@@ -14,6 +26,7 @@ var is_typing: bool = false
 
 func _ready() -> void:
 	hide()
+	portrait_rect.custom_minimum_size = portrait_size
 	portrait_rect.hide()
 	
 	DialogueManager.dialogue_command_requested.connect(_on_dialogue_command_requested)
@@ -103,24 +116,41 @@ func _on_choices_requested(
 	_clear_choices()
 	
 	for i in choices.size():
-		var label := Label.new()
-		label.text = resolved_choice_texts[i]
-		choices_container.add_child(label)
+		var button := Button.new()
+		
+		button.text = resolved_choice_texts[i]
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.custom_minimum_size = choice_button_size
+		
+		choices_container.add_child(button)
 
 func _on_choice_selection_changed(
 	index: int,
 	resolved_choice_texts: Array
 ) -> void:
-	var labels := choices_container.get_children()
+	var buttons := choices_container.get_children()
 	
-	for i in labels.size():
-		var label := labels[i] as Label
-		var choice_text: String = resolved_choice_texts[i]
+	for i in buttons.size():
+		var button := buttons[i] as Button
+		
+		if button == null:
+			continue
+		
+		button.text = resolved_choice_texts[i]
 		
 		if i == index:
-			label.text = "> " + choice_text
+			button.modulate = Color.WHITE
+			_apply_choice_style(
+				button,
+				choice_selected_style
+			)
 		else:
-			label.text = "  " + choice_text
+			button.modulate = Color.WHITE
+			_apply_choice_style(
+				button,
+				choice_normal_style
+			)
 
 func _on_dialogue_finished() -> void:
 	hide()
@@ -148,3 +178,16 @@ func _on_dialogue_command_requested(command: DialogueCommand) -> void:
 		
 		"reset_text_speed":
 			typewriter_speed = 45.0
+
+
+func _apply_choice_style(
+	button: Button,
+	style: StyleBox
+) -> void:
+	if style == null:
+		return
+	
+	button.add_theme_stylebox_override("normal", style)
+	button.add_theme_stylebox_override("hover", style)
+	button.add_theme_stylebox_override("pressed", style)
+	button.add_theme_stylebox_override("focus", style)

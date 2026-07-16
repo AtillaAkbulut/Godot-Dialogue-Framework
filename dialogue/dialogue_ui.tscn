@@ -1,43 +1,99 @@
 [gd_scene format=3 uid="uid://cfnqikp8pt2t0"]
 
 [ext_resource type="Script" uid="uid://d3ihoen72q350" path="res://dialogue/dialogue_ui.gd" id="1_km8cd"]
+[ext_resource type="StyleBox" uid="uid://ce8yv2qcj267n" path="res://dialogue/themes/default/choice_normal_style.tres" id="2_u0wqm"]
+[ext_resource type="StyleBox" uid="uid://sdi5hww24rha" path="res://dialogue/themes/default/choice_selected_style.tres" id="3_2m2cu"]
+[ext_resource type="Texture2D" uid="uid://dqy88n37ual3e" path="res://dialogue_panel.png" id="4_2m2cu"]
 
 [node name="DialogueUI" type="CanvasLayer" unique_id=719020287]
 script = ExtResource("1_km8cd")
+choice_normal_style = ExtResource("2_u0wqm")
+choice_selected_style = ExtResource("3_2m2cu")
 
-[node name="Panel" type="Panel" parent="." unique_id=732633407]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -130.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="PortraitRect" type="TextureRect" parent="Panel" unique_id=1329126609]
-layout_mode = 0
-offset_left = 949.0
-offset_top = -84.0
-offset_right = 1142.0
-offset_bottom = 117.0
-expand_mode = 3
-stretch_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=171998722]
-layout_mode = 1
+[node name="Root" type="Control" parent="." unique_id=1791254484]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpeakerLabel" type="Label" parent="Panel/VBoxContainer" unique_id=77159645]
-layout_mode = 2
-size_flags_horizontal = 0
+[node name="Panel" type="NinePatchRect" parent="Root" unique_id=1460574162]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_2m2cu")
 
-[node name="TextLabel" type="Label" parent="Panel/VBoxContainer" unique_id=982223704]
+[node name="SpeakerLabel" type="Label" parent="Root/Panel" unique_id=471719829]
+layout_mode = 0
+offset_left = 153.0
+offset_top = 8.0
+offset_right = 215.0
+offset_bottom = 31.0
+text = "OldMan"
+
+[node name="Content" type="VBoxContainer" parent="Root/Panel" unique_id=357551989]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 387.0
+offset_right = -387.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TextLabel" type="Label" parent="Root/Panel/Content" unique_id=1622809782]
 layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "HELLO TRAVELER"
 horizontal_alignment = 1
+autowrap_mode = 2
 
-[node name="ChoicesContainer" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=764783396]
+[node name="Spacer" type="Control" parent="Root/Panel/Content" unique_id=1486520798]
+custom_minimum_size = Vector2(0, 19.36)
 layout_mode = 2
+
+[node name="Choices" type="VBoxContainer" parent="Root/Panel/Content" unique_id=2017907841]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Button" type="Button" parent="Root/Panel/Content/Choices" unique_id=1610114253]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "BUTTON 1
+"
+
+[node name="Button2" type="Button" parent="Root/Panel/Content/Choices" unique_id=531408863]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "BUTTON 1
+"
+
+[node name="Button3" type="Button" parent="Root/Panel/Content/Choices" unique_id=1888444654]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "BUTTON 1
+"
+
+[node name="Portrait" type="TextureRect" parent="Root/Panel" unique_id=155628018]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -323.0
+offset_top = -117.0
+offset_right = -67.0
+offset_bottom = 138.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
